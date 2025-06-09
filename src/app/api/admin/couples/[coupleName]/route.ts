@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(req: NextRequest, context: { params: { coupleName: string } }) {
+export async function GET(request: NextRequest, context: { params: { coupleName: string } }) {
   try {
     const couple = await prisma.couple.findUnique({
       where: { name: context.params.coupleName },
@@ -19,9 +19,9 @@ export async function GET(req: NextRequest, context: { params: { coupleName: str
   }
 }
 
-export async function PATCH(req: NextRequest, context: { params: { coupleName: string } }) {
+export async function PATCH(request: NextRequest, context: { params: { coupleName: string } }) {
   try {
-    const { displayTitle } = await req.json();
+    const { displayTitle } = await request.json();
     const couple = await prisma.couple.update({
       where: { name: context.params.coupleName },
       data: { displayTitle },
@@ -32,7 +32,7 @@ export async function PATCH(req: NextRequest, context: { params: { coupleName: s
   }
 }
 
-export async function DELETE(req: NextRequest, context: { params: { coupleName: string } }) {
+export async function DELETE(request: NextRequest, context: { params: { coupleName: string } }) {
   try {
     await prisma.couple.delete({
       where: { name: context.params.coupleName },
