@@ -58,7 +58,7 @@ export default function CoupleMomentsPage() {
   const fetchGallery = async () => {
     setLoadingGallery(true);
     try {
-      const res = await fetch(`/moments/${coupleName}/gallery`);
+      const res = await fetch(`/u/${coupleName}/gallery`);
       const data = await res.json();
       setGallery(data.photos || []);
     } catch {
@@ -108,7 +108,7 @@ export default function CoupleMomentsPage() {
       formData.append('photo', file);
       formData.append('message', message);
       formData.append('attendeeName', attendeeName);
-      const res = await fetch(`/moments/${coupleName}/upload`, {
+      const res = await fetch(`/u/${coupleName}/upload`, {
         method: 'POST',
         body: formData,
       });

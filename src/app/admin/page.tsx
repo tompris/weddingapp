@@ -221,13 +221,13 @@ export default function AdminPage() {
                   ) : (
                     <>
                       <h3 className="font-medium text-gray-900">{couple.displayTitle}</h3>
-                      <p className="text-sm text-gray-500">URL: /moments/{couple.name}</p>
+                      <p className="text-sm text-gray-500">URL: /u/{couple.name}</p>
                     </>
                   )}
                 </div>
                 <div className="flex gap-2">
                   <button
-                    onClick={() => router.push(`/moments/${couple.name}`)}
+                    onClick={() => router.push(`/u/${couple.name}`)}
                     className="text-pink-500 hover:text-pink-600"
                   >
                     View
