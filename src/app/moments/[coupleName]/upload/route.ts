@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { PrismaClient } from '@prisma/client';
+import sharp from 'sharp';
 
 const prisma = new PrismaClient();
 
@@ -30,7 +31,26 @@ export async function POST(req: NextRequest, { params }: { params: { coupleName:
     const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
     const filePath = path.join(uploadsDir, fileName);
     const arrayBuffer = await file.arrayBuffer();
-    await writeFile(filePath, Buffer.from(arrayBuffer));
+    const buffer = Buffer.from(new Uint8Array(arrayBuffer as ArrayBuffer));
+
+    // Use sharp to resize the image
+    const image = sharp(buffer);
+    const metadata = await image.metadata();
+    const longerEdge = Math.max(metadata.width || 0, metadata.height || 0);
+
+    let resizedBuffer = buffer;
+    if (longerEdge > 1500) {
+      resizedBuffer = await image
+        .resize({
+          width: metadata.width && metadata.width >= metadata.height ? 1500 : undefined,
+          height: metadata.height && metadata.height > metadata.width ? 1500 : undefined,
+          fit: 'inside',
+          withoutEnlargement: true,
+        })
+        .toBuffer();
+    }
+
+    await writeFile(filePath, resizedBuffer);
 
     // Store in DB
     const photo = await prisma.photo.create({

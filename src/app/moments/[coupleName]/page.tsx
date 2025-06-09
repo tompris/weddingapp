@@ -20,6 +20,12 @@ interface Photo {
   createdAt: string;
 }
 
+interface Couple {
+  id: number;
+  name: string;
+  displayTitle: string;
+}
+
 export default function CoupleMomentsPage() {
   const params = useParams();
   const coupleName = params?.coupleName as string;
@@ -31,7 +37,23 @@ export default function CoupleMomentsPage() {
   const [success, setSuccess] = useState(false);
   const [gallery, setGallery] = useState<Photo[]>([]);
   const [loadingGallery, setLoadingGallery] = useState(false);
+  const [couple, setCouple] = useState<Couple | null>(null);
   const webcamRef = useRef<any>(null);
+
+  const fetchCouple = async () => {
+    try {
+      const res = await fetch(`/api/admin/couples/${coupleName}`);
+      if (res.ok) {
+        const data = await res.json();
+        setCouple(data.couple);
+      } else {
+        // Handle invalid couple name
+        window.location.href = '/';
+      }
+    } catch (err) {
+      console.error('Error fetching couple:', err);
+    }
+  };
 
   const fetchGallery = async () => {
     setLoadingGallery(true);
@@ -47,8 +69,10 @@ export default function CoupleMomentsPage() {
   };
 
   useEffect(() => {
-    if (coupleName) fetchGallery();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (coupleName) {
+      fetchCouple();
+      fetchGallery();
+    }
   }, [coupleName]);
 
   const capture = () => {
@@ -106,44 +130,15 @@ export default function CoupleMomentsPage() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-start p-4 bg-pink-50">
-      <h1 className="text-3xl font-extrabold mb-4 text-pink-700 tracking-wide" style={{ fontFamily: 'serif' }}>Share a Memory for {coupleName}</h1>
+      <h1 className="text-3xl font-extrabold mb-4 text-pink-700 tracking-wide" style={{ fontFamily: 'serif' }}>
+        {couple?.displayTitle}
+      </h1>
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 mb-6 border border-pink-100">
-        <div className="flex justify-center mb-4">
-          <button
-            className={`px-4 py-2 rounded-l-full ${mode === 'camera' ? 'bg-pink-500 text-white' : 'bg-pink-100 text-pink-700'}`}
-            onClick={() => setMode('camera')}
-          >
-            Selfie
-          </button>
-          <button
-            className={`px-4 py-2 rounded-r-full ${mode === 'upload' ? 'bg-pink-500 text-white' : 'bg-pink-100 text-pink-700'}`}
-            onClick={() => setMode('upload')}
-          >
-            Fotografija
-          </button>
-        </div>
         {photo ? (
           <div className="flex flex-col items-center">
             <img src={photo} alt="Preview" className="w-full rounded-lg mb-2" />
             <button className="text-sm text-pink-500 mb-2" onClick={() => setPhoto(null)}>
               Remove
-            </button>
-          </div>
-        ) : mode === 'camera' ? (
-          <div className="flex flex-col items-center">
-            <Webcam
-              audio={false}
-              ref={(node: any) => { webcamRef.current = node; }}
-              screenshotFormat="image/jpeg"
-              className="w-full rounded-lg mb-2"
-              videoConstraints={{ facingMode: 'user' }}
-            />
-            <button
-              className="bg-pink-500 text-white px-4 py-2 rounded-full"
-              onClick={capture}
-              type="button"
-            >
-              Take Photo
             </button>
           </div>
         ) : (
@@ -166,18 +161,18 @@ export default function CoupleMomentsPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-2 mt-2">
           <input
             type="text"
-            placeholder="Your name"
+            placeholder="Tvoje ime"
             value={attendeeName}
             onChange={e => setAttendeeName(e.target.value)}
-            className="border rounded-full px-4 py-2"
+            className="border rounded-full px-4 py-2 bg-white placeholder-gray-500 text-base text-gray-900"
             required
           />
           <input
             type="text"
-            placeholder="Add a message for the couple..."
+            placeholder="Vpiši svoje sporočilo in voščilo"
             value={message}
             onChange={e => setMessage(e.target.value)}
-            className="border rounded-full px-4 py-2"
+            className="border rounded-full px-4 py-2 bg-white placeholder-gray-500 text-base text-gray-900"
             maxLength={120}
             required
           />
