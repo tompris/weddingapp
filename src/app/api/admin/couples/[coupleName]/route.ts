@@ -3,10 +3,10 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: NextRequest, context: { params: { coupleName: string } }) {
+export async function GET(request: NextRequest, { params }: { params: { coupleName: string } }) {
   try {
     const couple = await prisma.couple.findUnique({
-      where: { name: context.params.coupleName },
+      where: { name: params.coupleName },
     });
 
     if (!couple) {
@@ -19,11 +19,11 @@ export async function GET(request: NextRequest, context: { params: { coupleName:
   }
 }
 
-export async function PATCH(request: NextRequest, context: { params: { coupleName: string } }) {
+export async function PATCH(request: NextRequest, { params }: { params: { coupleName: string } }) {
   try {
     const { displayTitle } = await request.json();
     const couple = await prisma.couple.update({
-      where: { name: context.params.coupleName },
+      where: { name: params.coupleName },
       data: { displayTitle },
     });
     return NextResponse.json({ couple });
@@ -32,10 +32,10 @@ export async function PATCH(request: NextRequest, context: { params: { coupleNam
   }
 }
 
-export async function DELETE(request: NextRequest, context: { params: { coupleName: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: { coupleName: string } }) {
   try {
     await prisma.couple.delete({
-      where: { name: context.params.coupleName },
+      where: { name: params.coupleName },
     });
     return NextResponse.json({ success: true });
   } catch (err) {
