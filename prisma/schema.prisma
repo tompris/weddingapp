@@ -21,10 +21,11 @@ model Couple {
 }
 
 model Photo {
-  id        Int      @id @default(autoincrement())
-  url       String
-  message   String?
-  couple    Couple   @relation(fields: [coupleId], references: [id])
-  coupleId  Int
-  createdAt DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  url           String
+  message       String?
+  attendeeName  String?
+  couple        Couple   @relation(fields: [coupleId], references: [id])
+  coupleId      Int
+  createdAt     DateTime @default(now())
 }

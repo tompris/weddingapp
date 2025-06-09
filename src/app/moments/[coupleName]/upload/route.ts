@@ -10,9 +10,10 @@ export async function POST(req: NextRequest, { params }: { params: { coupleName:
     const formData = await req.formData();
     const file = formData.get('photo') as File;
     const message = formData.get('message') as string;
+    const attendeeName = formData.get('attendeeName') as string;
     const coupleName = params.coupleName;
 
-    if (!file || !message || !coupleName) {
+    if (!file || !message || !attendeeName || !coupleName) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
     }
 
@@ -36,6 +37,7 @@ export async function POST(req: NextRequest, { params }: { params: { coupleName:
       data: {
         url: `/uploads/${coupleName}/${fileName}`,
         message,
+        attendeeName,
         coupleId: couple.id,
       },
     });
