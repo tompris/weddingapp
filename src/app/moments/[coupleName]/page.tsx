@@ -181,9 +181,9 @@ export default function CoupleMomentsPage() {
             className="bg-pink-500 text-white px-4 py-2 rounded-full disabled:opacity-50"
             disabled={!photo || !message || !attendeeName || uploading}
           >
-            {uploading ? 'Uploading...' : 'Deli trenutek'}
+            {uploading ? 'Nalaganje...' : 'Deli trenutek'}
           </button>
-          {success && <div className="text-green-600 text-center">Memory shared! 🎉</div>}
+          {success && <div className="text-green-600 text-center">Uspešno poslano! 🎉</div>}
         </form>
       </div>
       {/* Gallery will go here */}

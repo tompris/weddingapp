@@ -34,11 +34,11 @@ export async function POST(req: NextRequest, { params }: { params: { coupleName:
     const buffer = Buffer.from(new Uint8Array(arrayBuffer as ArrayBuffer));
 
     // Use sharp to resize the image
-    const image = sharp(buffer);
+    const image = sharp(buffer).rotate();
     const metadata = await image.metadata();
     const longerEdge = Math.max(metadata.width || 0, metadata.height || 0);
 
-    let resizedBuffer = buffer;
+    let resizedBuffer;
     if (longerEdge > 1500) {
       resizedBuffer = await image
         .resize({
@@ -48,6 +48,8 @@ export async function POST(req: NextRequest, { params }: { params: { coupleName:
           withoutEnlargement: true,
         })
         .toBuffer();
+    } else {
+      resizedBuffer = await image.toBuffer(); // ensure rotation is applied even if not resized
     }
 
     await writeFile(filePath, resizedBuffer);
