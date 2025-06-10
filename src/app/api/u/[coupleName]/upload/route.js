@@ -7,6 +7,12 @@ import { randomUUID } from 'crypto';
 const prisma = new PrismaClient();
 const uploadsRoot = path.join(process.cwd(), 'public', 'uploads');
 
+export const runtime = 'nodejs';
+
+export async function GET() {
+  return new Response('GET works');
+}
+
 export async function POST(request, context) {
   const params = await context.params;
   const coupleName = params.coupleName;
