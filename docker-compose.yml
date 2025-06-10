@@ -12,3 +12,9 @@ services:
     volumes:
       - ./public/uploads:/app/public/uploads
       - ./prisma:/app/prisma
+    networks:
+      - n8n-docker-caddy_default
+
+networks:
+  n8n-docker-caddy_default:
+    external: true
