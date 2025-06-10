@@ -40,7 +40,7 @@ export default function AdminPage() {
     try {
       const res = await fetch('/api/admin/couples');
       const data = await res.json();
-      setCouples(data.couples);
+      setCouples(Array.isArray(data) ? data : data.couples || []);
     } catch (err) {
       console.error('Error fetching couples:', err);
     }
