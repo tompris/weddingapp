@@ -198,7 +198,7 @@ export default function CoupleMomentsPage() {
             {gallery.map(photo => (
               <div key={photo.id} className="w-full bg-white rounded-2xl shadow-lg overflow-hidden border border-pink-100">
                 <img
-                  src={photo.url}
+                  src={photo.url.startsWith('/photos/') ? `/api${photo.url}` : photo.url}
                   alt={photo.message}
                   className="w-full object-cover max-h-96"
                   style={{ aspectRatio: '4/3', objectFit: 'cover' }}

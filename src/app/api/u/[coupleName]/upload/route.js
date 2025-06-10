@@ -5,7 +5,7 @@ import path from 'path';
 import { randomUUID } from 'crypto';
 
 const prisma = new PrismaClient();
-const uploadsRoot = path.join(process.cwd(), 'public', 'uploads');
+const uploadsRoot = path.join(process.cwd(), 'public', 'photos');
 
 export const runtime = 'nodejs';
 
@@ -61,7 +61,7 @@ export async function POST(request, context) {
     // Create the photo record with the correct URL
     const photo = await prisma.photo.create({
       data: {
-        url: `/uploads/${coupleName}/${filename}`,
+        url: `/photos/${coupleName}/${filename}`,
         message: message.toString(),
         attendeeName: attendeeName.toString(),
         coupleId: couple.id,
