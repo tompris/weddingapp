@@ -18,6 +18,3 @@ services:
 networks:
   n8n-docker-caddy_default:
     external: true
-
-volumes:
-  uploads_data:
