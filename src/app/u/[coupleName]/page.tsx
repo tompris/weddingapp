@@ -45,7 +45,7 @@ export default function CoupleMomentsPage() {
       const res = await fetch(`/api/admin/couples/${coupleName}`);
       if (res.ok) {
         const data = await res.json();
-        setCouple(data.couple);
+        setCouple(data);
       } else {
         // Handle invalid couple name
         window.location.href = '/';

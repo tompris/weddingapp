@@ -6,7 +6,11 @@ const prisma = new PrismaClient();
 export async function GET(request, context) {
   const params = await context.params;
   const slug = params.slug;
-  return NextResponse.json({ ok: true, slug });
+  const couple = await prisma.couple.findUnique({ where: { name: slug } });
+  if (!couple) {
+    return NextResponse.json({ error: 'Couple not found' }, { status: 404 });
+  }
+  return NextResponse.json(couple);
 }
 
 export async function PATCH(request, context) {
