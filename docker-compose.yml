@@ -10,4 +10,5 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - ./public/uploads:/app/public/uploads 
+      - ./public/uploads:/app/public/uploads
+      - ./prisma:/app/prisma
